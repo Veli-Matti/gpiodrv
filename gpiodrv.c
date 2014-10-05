@@ -11,7 +11,6 @@ struct gpio_dev {
 	int led_pin;
 } my_gpio_dev;
 
-#define LED_GPIO		17
 #define INPUT_MAX_LEN	30
 
 static int setPin(const int pin, const int mode, const int value);
@@ -19,7 +18,6 @@ static int setPin(const int pin, const int mode, const int value);
 static int gpiodrv_open(struct inode *inode, struct file *file)
 {
     pr_info("I have been awoken\n");
-
     
     return 0;
 }
@@ -137,33 +135,17 @@ static int __init gpiodrv_init(void)
  
     pr_info("I'm in\n");
     
-    // Configure the ledpin as output
-    // and set it as LOW
-    /*
-    if (gpio_request(LED_GPIO, "gpiodrv_led_pin")) {
-		pr_info("gpio reservation failed!\n");
-		return -1;
-	}
-	if (gpio_direction_output(LED_GPIO, 1)) {
-		gpio_free(LED_GPIO);
-		pr_info("gpio direction setting failed!\n");
-		return -1;
-	}
-    */
     return 0;
 }
  
 static void __exit gpiodrv_exit(void)
 {
-	gpio_set_value(LED_GPIO, 0);
-	gpio_free(LED_GPIO);
 	misc_deregister(&gpiodrv_device);
     pr_info("I'm out\n");
 }
 
 static int setPin(const int pin, const int mode, const int value)
 {
-
 	/* Request the pin */
     if (gpio_request(pin, "gpiodrv_pin")) {
 		pr_info("gpio reservation failed!\n");
